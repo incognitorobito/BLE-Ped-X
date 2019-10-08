@@ -2,7 +2,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-sensor_data = pd.read_csv('Accel_Cheek_PSU_Walk.csv')
+sensor_data = pd.read_csv('Accel_Pocket_Curb_Stomp.csv')
 print(sensor_data.head(5))
 
 sensor_data['TIMESTAMP'] = pd.to_datetime(sensor_data['TIMESTAMP'])
