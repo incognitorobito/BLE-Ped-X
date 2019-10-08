@@ -15,6 +15,8 @@ Stationary vs. Non-Stationary
 
 * Is there a general curve that can be extracted from accel data when walking normally?
   * What does acceleration near crossings do to this curve?
+* Turn at curb or jaywalking model?
+  * Walking curve along as normal, maybe slow down a bit, then turn to face street from sidewalk/curb.
 * Gyroscope on ramps.
 * Magnetometer near cars, does this produce a doppler like effect, but in terms of a compass and a car obstructing a magnetic field? Would this be the case with electric motors?
 
