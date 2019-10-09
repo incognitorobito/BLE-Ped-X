@@ -20,3 +20,6 @@ Stationary vs. Non-Stationary
 * Gyroscope on ramps.
 * Magnetometer near cars, does this produce a doppler like effect, but in terms of a compass and a car obstructing a magnetic field? Would this be the case with electric motors?
 
+### Plan of Action
+
+Build out several of the feature points in app then combine into NN.
