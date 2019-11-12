@@ -1,18 +1,25 @@
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import numpy as np
-import seaborn as sns
-from matplotlib import pyplot as plt
 from pandas.plotting import register_matplotlib_converters
 
 register_matplotlib_converters()
 
-sensor_data = pd.read_csv('Accel_PSU_Short_Pauses.csv')
+
+numpy.polyfi()
+
+sensor_data = pd.read_csv("Accel_PSU_Short_Pauses.csv")
 print(sensor_data.head(5))
 
-sensor_data['TIMESTAMP'] = pd.to_datetime(sensor_data['TIMESTAMP'])
+sensor_data["TIMESTAMP"] = pd.to_datetime(sensor_data["TIMESTAMP"])
 
-sns.lineplot(x=sensor_data['TIMESTAMP'], y=sensor_data["Y"], label="Y Accel").set_title("Accel Readings")
-sns.lineplot(x=sensor_data['TIMESTAMP'], y=sensor_data["X"], label="X Accel")
-sns.lineplot(x=sensor_data['TIMESTAMP'], y=sensor_data["Z"], label="Z Accel")
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=sensor_data["TIMESTAMP"], y=sensor_data["X"], name="X Accel"))
+fig.add_trace(go.Scatter(x=sensor_data["TIMESTAMP"], y=sensor_data["Y"], name="Y Accel"))
+fig.add_trace(go.Scatter(x=sensor_data["TIMESTAMP"], y=sensor_data["Z"], name="Z Accel"))
 
-plt.show()
+fig.update_layout(title_text='Walking With Pauses',
+                  xaxis_rangeslider_visible=True)
+# fig = px.line(sensor_data, x = "TIMESTAMP", y = "Y", title="Acceleration")
+fig.show()
