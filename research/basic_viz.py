@@ -18,5 +18,5 @@ fig.add_trace(go.Scatter(x=sensor_data["TIMESTAMP"], y=sensor_data["Z"], name="Z
 
 fig.update_layout(title_text='Walking With Pauses',
                   xaxis_rangeslider_visible=True)
-# fig = px.line(sensor_data, x = "TIMESTAMP", y = "Y", title="Acceleration")
+
 fig.show()
