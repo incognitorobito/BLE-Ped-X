@@ -6,7 +6,7 @@ from pandas.plotting import register_matplotlib_converters
 
 register_matplotlib_converters()
 
-sensor_data = pd.read_csv("Accel_PSU_Short_Pauses.csv")
+sensor_data = pd.read_csv("Accel_Cheek_PSU_Walk.csv")
 print(sensor_data.head(5))
 
 sensor_data["TIMESTAMP"] = pd.to_datetime(sensor_data["TIMESTAMP"])
