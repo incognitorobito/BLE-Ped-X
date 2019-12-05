@@ -1,14 +1,8 @@
 import pandas as pd
 import numpy as np
-import keras
 from datetime import datetime
-from scipy import stats
 from sklearn import preprocessing
 from pandas.plotting import register_matplotlib_converters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Reshape
-from keras.layers import Conv2D, MaxPooling2D
-from keras.utils import np_utils
 
 register_matplotlib_converters()
 
