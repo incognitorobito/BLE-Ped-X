@@ -24,7 +24,7 @@ N_FEATURES = 3
 ACTIVITY_LABELS = ["stationary", "walking"]
 
 training_data = pd.read_csv("Accel_PSU_Short_Pauses_Cleaned.csv")
-test_data = pd.read_csv("Accel_Cheek_PSU_Walk_Cleaned.csv")
+test_data = pd.read_csv("Accel_Library_Slowdown.csv")
 
 training_data["TIMESTAMP"] = pd.to_datetime(training_data["TIMESTAMP"])
 test_data["TIMESTAMP"] = pd.to_datetime(test_data["TIMESTAMP"])
