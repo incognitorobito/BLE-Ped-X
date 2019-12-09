@@ -10,35 +10,37 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 564
-EPOCHS = 150
-DATA_IN_PERIOD = 18
-
-# x, y, z acceleration as features
-N_FEATURES = 3
+BATCH_SIZE = 28
+EPOCHS = 100
+DATA_IN_PERIOD = 14
+# X, Y and Z acceleration are our features
+FEATURES = 3
 
 ACTIVITY_LABELS = ["walking", "stationary", "accel", "decel"]
 
-training_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses_Cleaned.csv")
-test_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses_Cleaned.csv")
+# Read in our data
+training_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
+test_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
 
 training_data["TIMESTAMP"] = pd.to_datetime(training_data["TIMESTAMP"])
 test_data["TIMESTAMP"] = pd.to_datetime(test_data["TIMESTAMP"])
 
+# Normalize the training and testing data
 training_data["X"] = training_data["X"] / training_data["X"].max()
 training_data["Y"] = training_data["Y"] / training_data["Y"].max()
 training_data["Z"] = training_data["Z"] / training_data["Z"].max()
+
+test_data["X"] = test_data["X"] / test_data["X"].max()
+test_data["Y"] = test_data["Y"] / test_data["Y"].max()
+test_data["Z"] = test_data["Z"] / test_data["Z"].max()
 
 # Define column name of the label vector
 LABEL = "ACTIVITYENCODED"
 # Transform the labels from String to Integer via LabelEncoder
 le = preprocessing.LabelEncoder()
-# Add a new column to the existing DataFrame with the encoded values
+# Add a new column to the existing data with the encoded values
 training_data[LABEL] = le.fit_transform(training_data["ACTIVITY"].values.ravel())
 test_data[LABEL] = le.fit_transform(test_data["ACTIVITY"].values.ravel())
-
-# training_data = sensor_data[sensor_data["TIMESTAMP"] <= cut_off_time]
-# test_data = sensor_data[sensor_data["TIMESTAMP"] > cut_off_time]
 
 def create_segments_and_labels(data, data_in_period, label_name):
 
@@ -57,7 +59,7 @@ def create_segments_and_labels(data, data_in_period, label_name):
         labels.append(label)
 
     # Bring the segments into a better shape
-    reshaped_segments = np.asarray(segments, dtype= np.float32).reshape(-1, data_in_period, N_FEATURES)
+    reshaped_segments = np.asarray(segments, dtype= np.float32).reshape(-1, data_in_period, FEATURES)
     labels = np.asarray(labels)
 
     return reshaped_segments, labels
@@ -80,15 +82,18 @@ y_test = y_test.astype("float32")
 num_time_periods, num_sensors = x_train.shape[1], x_train.shape[2]
 num_classes = le.classes_.size
 
+# Do one hot encoding to turn the string representation into a number.
 y_train_hot = keras.utils.np_utils.to_categorical(y_train, num_classes)
 y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
+# Actual neural net construction
 model = keras.models.Sequential()
-model.add(keras.layers.Dense(42, activation='relu', input_shape=(DATA_IN_PERIOD, N_FEATURES)))
-model.add(keras.layers.Dense(30, activation='relu'))
-model.add(keras.layers.Dense(8, activation='relu'))
+# model.add(keras.layers.Dense(BATCH_SIZE * (DATA_IN_PERIOD * FEATURES), activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
+# model.add(keras.layers.Dropout(0.25))
 model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu"))
+model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
+model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.MaxPooling1D(pool_size=2))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(num_classes, activation="softmax"))
@@ -97,24 +102,20 @@ model.compile(loss="categorical_crossentropy",
               optimizer="adam",
               metrics=["accuracy"])
 
+# Don't forget to save.
 model.save_weights("complex_labels.h5")
 keras.models.save_model(model, "complex_full.h5")
-
-# callbacks_list = [
-#     keras.callbacks.ModelCheckpoint(
-#         filepath="./models/best_model.{epoch:02d}-{val_loss:.2f}.h5",
-#         monitor="val_loss", save_best_only=True),
-#     keras.callbacks.EarlyStopping(monitor="accuracy", patience=1)
-# ]
 
 history = model.fit(x_train, y_train_hot,
                       epochs=EPOCHS, 
                       batch_size=BATCH_SIZE, 
                       validation_split=0.2,
-                    #   callbacks=callbacks_list,
                       verbose=1)
 
+# Print an overview of the model, the labels, and a prediction against the test data.
+
 print(model.summary())
+
 label_list = le.classes_.tolist()
 for item in label_list:
     print(label_list.index(item),item)
@@ -122,6 +123,7 @@ for item in label_list:
 prediction = model.predict_classes(x_test)
 print(prediction)
 
+# Plot model accuracy
 plt.figure(figsize=(6, 4))
 plt.plot(history.history["accuracy"], "r", label="Accuracy of training data")
 plt.plot(history.history["val_accuracy"], "b", label="Accuracy of validation data")
