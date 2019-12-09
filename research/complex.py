@@ -14,16 +14,16 @@ from matplotlib import pyplot as plt
 register_matplotlib_converters()
 
 BATCH_SIZE = 500
-EPOCHS = 300
-DATA_IN_PERIOD = 50
+EPOCHS = 1000
+DATA_IN_PERIOD = 14
 # X, Y and Z acceleration are our features
 FEATURES = 3
 
 ACTIVITY_LABELS = ["walking", "stationary", "accel", "decel"]
 
 # Read in our data
-training_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
-test_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
+training_data = pd.read_csv("data/complex_labels/Combined.csv")
+test_data = pd.read_csv("data/complex_labels/Accel_Library_Slowdown.csv")
 
 training_data["TIMESTAMP"] = pd.to_datetime(training_data["TIMESTAMP"])
 test_data["TIMESTAMP"] = pd.to_datetime(test_data["TIMESTAMP"])

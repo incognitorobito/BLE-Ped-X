@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import numpy as np
 from pandas.plotting import register_matplotlib_converters
 
-filename = "data/complex_labels/Accel_PSU_Short_Pauses"
+filename = "data/complex_labels/Accel_Library_Slowdown"
 
 register_matplotlib_converters()
 
