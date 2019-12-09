@@ -10,9 +10,9 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 72
-EPOCHS = 125
-DATA_IN_PERIOD = 12
+BATCH_SIZE = 564
+EPOCHS = 150
+DATA_IN_PERIOD = 18
 
 # x, y, z acceleration as features
 N_FEATURES = 3
@@ -84,10 +84,13 @@ y_train_hot = keras.utils.np_utils.to_categorical(y_train, num_classes)
 y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
 model = keras.models.Sequential()
-model.add(keras.layers.LSTM(input_shape = (DATA_IN_PERIOD, N_FEATURES), units=N_FEATURES * DATA_IN_PERIOD, dropout=0.2, recurrent_dropout=0.2))
-model.add(keras.layers.Dense(42, activation='relu'))
-# model.add(keras.layers.Dense(30, activation='relu'))
-# model.add(keras.layers.Dense(8, activation='relu'))
+model.add(keras.layers.Dense(42, activation='relu', input_shape=(DATA_IN_PERIOD, N_FEATURES)))
+model.add(keras.layers.Dense(30, activation='relu'))
+model.add(keras.layers.Dense(8, activation='relu'))
+model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu"))
+model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
+model.add(keras.layers.MaxPooling1D(pool_size=2))
+model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(num_classes, activation="softmax"))
 
 #LSTM
@@ -118,7 +121,7 @@ keras.models.save_model(model, "complex_full.h5")
 history = model.fit(x_train, y_train_hot,
                       epochs=EPOCHS, 
                       batch_size=BATCH_SIZE, 
-                      validation_split=0.5,
+                      validation_split=0.2,
                     #   callbacks=callbacks_list,
                       verbose=1)
 
