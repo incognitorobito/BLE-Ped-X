@@ -13,8 +13,8 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 500
-EPOCHS = 1000
+BATCH_SIZE = 64
+EPOCHS = 100
 DATA_IN_PERIOD = 14
 # X, Y and Z acceleration are our features
 FEATURES = 3
@@ -23,7 +23,7 @@ ACTIVITY_LABELS = ["walking", "stationary", "accel", "decel"]
 
 # Read in our data
 training_data = pd.read_csv("data/complex_labels/Combined.csv")
-test_data = pd.read_csv("data/complex_labels/Accel_Library_Slowdown.csv")
+test_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
 
 training_data["TIMESTAMP"] = pd.to_datetime(training_data["TIMESTAMP"])
 test_data["TIMESTAMP"] = pd.to_datetime(test_data["TIMESTAMP"])
@@ -91,15 +91,24 @@ y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
 # Actual neural net construction
 model = keras.models.Sequential()
-# model.add(keras.layers.Dense(BATCH_SIZE * (DATA_IN_PERIOD * FEATURES), activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
-# model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, FEATURES)))
+model.add(keras.layers.Dense(FEATURES + 1, activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
 model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
-model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.MaxPooling1D(pool_size=2))
+# model.add(keras.layers.Dense(10, activation='relu'))
+# model.add(keras.layers.Dense(10, activation='relu'))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(num_classes, activation="softmax"))
+
+# DNN
+# model.add(keras.layers.Dense(FEATURES, activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES))
+# model.add(keras.layers.Dense(100, activation='relu'))
+# model.add(keras.layers.Dense(100, activation='relu'))
+
+# CNN
+# model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, FEATURES)))
+# model.add(keras.layers.Dropout(0.5))
+# model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
+# model.add(keras.layers.Dropout(0.5))
+# model.add(keras.layers.MaxPooling1D(pool_size=2))
 
 model.compile(loss="categorical_crossentropy",
               optimizer="adam",
@@ -112,7 +121,7 @@ keras.models.save_model(model, "complex_full.h5")
 history = model.fit(x_train, y_train_hot,
                       epochs=EPOCHS, 
                       batch_size=BATCH_SIZE, 
-                      validation_split=0.2,
+                      validation_data=(x_test, y_test_hot),
                       verbose=1)
 
 # Print an overview of the model, the labels, and a prediction against the test data.
