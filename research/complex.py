@@ -13,9 +13,9 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 18
-EPOCHS = 60
-DATA_IN_PERIOD = 14
+BATCH_SIZE = 500
+EPOCHS = 300
+DATA_IN_PERIOD = 50
 # X, Y and Z acceleration are our features
 FEATURES = 3
 
