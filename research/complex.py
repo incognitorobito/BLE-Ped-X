@@ -10,9 +10,9 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 90
+BATCH_SIZE = 72
 EPOCHS = 125
-DATA_IN_PERIOD = 16
+DATA_IN_PERIOD = 12
 
 # x, y, z acceleration as features
 N_FEATURES = 3
@@ -82,9 +82,9 @@ num_classes = le.classes_.size
 
 y_train_hot = keras.utils.np_utils.to_categorical(y_train, num_classes)
 y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
-	
+
 model = keras.models.Sequential()
-model.add(keras.layers.LSTM(N_FEATURES * DATA_IN_PERIOD, dropout=0.2, recurrent_dropout=0.2))
+model.add(keras.layers.LSTM(input_shape = (DATA_IN_PERIOD, N_FEATURES), units=N_FEATURES * DATA_IN_PERIOD, dropout=0.2, recurrent_dropout=0.2))
 model.add(keras.layers.Dense(42, activation='relu'))
 # model.add(keras.layers.Dense(30, activation='relu'))
 # model.add(keras.layers.Dense(8, activation='relu'))
