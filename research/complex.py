@@ -13,8 +13,8 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 28
-EPOCHS = 60
+BATCH_SIZE = 8
+EPOCHS = 15
 DATA_IN_PERIOD = 14
 # X, Y and Z acceleration are our features
 FEATURES = 3
@@ -91,9 +91,9 @@ y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
 # Actual neural net construction
 model = keras.models.Sequential()
-# model.add(keras.layers.Dense(BATCH_SIZE * (DATA_IN_PERIOD * FEATURES), activation='relu'))
-# model.add(keras.layers.Dropout(0.25))
-model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, FEATURES)))
+model.add(keras.layers.Dense(BATCH_SIZE * (DATA_IN_PERIOD * FEATURES), activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
+model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu"))
 model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
 model.add(keras.layers.Dropout(0.5))
