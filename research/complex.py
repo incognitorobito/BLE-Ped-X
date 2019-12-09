@@ -93,17 +93,6 @@ model.add(keras.layers.MaxPooling1D(pool_size=2))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(num_classes, activation="softmax"))
 
-#LSTM
-# model.add(keras.layers.LSTM(N_FEATURES * DATA_IN_PERIOD, dropout=0.2, recurrent_dropout=0.2))
-
-#CNN
-# model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, N_FEATURES)))
-# model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
-# model.add(keras.layers.Dropout(0.5))
-# model.add(keras.layers.MaxPooling1D(pool_size=2))
-# model.add(keras.layers.Flatten())
-# model.add(keras.layers.Dense(100, activation="relu"))
-
 model.compile(loss="categorical_crossentropy",
               optimizer="adam",
               metrics=["accuracy"])
