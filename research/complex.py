@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 register_matplotlib_converters()
 
 BATCH_SIZE = 64
-EPOCHS = 100
+EPOCHS = 75
 DATA_IN_PERIOD = 14
 # X, Y and Z acceleration are our features
 FEATURES = 3
@@ -91,24 +91,19 @@ y_test_hot = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
 # Actual neural net construction
 model = keras.models.Sequential()
-model.add(keras.layers.Dense(FEATURES + 1, activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
-model.add(keras.layers.Dropout(0.5))
-# model.add(keras.layers.Dense(10, activation='relu'))
-# model.add(keras.layers.Dense(10, activation='relu'))
-model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(num_classes, activation="softmax"))
 
 # DNN
-# model.add(keras.layers.Dense(FEATURES, activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES))
-# model.add(keras.layers.Dense(100, activation='relu'))
-# model.add(keras.layers.Dense(100, activation='relu'))
+model.add(keras.layers.Dense(FEATURES + 1, activation='relu', input_shape=(DATA_IN_PERIOD, FEATURES)))
+model.add(keras.layers.Dropout(0.5))
 
 # CNN
-# model.add(keras.layers.Conv1D(filters=16, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, FEATURES)))
-# model.add(keras.layers.Dropout(0.5))
-# model.add(keras.layers.Conv1D(filters=32, kernel_size=3, activation="relu"))
-# model.add(keras.layers.Dropout(0.5))
-# model.add(keras.layers.MaxPooling1D(pool_size=2))
+# model.add(keras.layers.Conv1D(filters=FEATURES, kernel_size=3, activation="relu", input_shape=(DATA_IN_PERIOD, FEATURES)))
+# model.add(keras.layers.Conv1D(filters=FEATURES * 2, kernel_size=3, activation="relu"))
+# model.add(keras.layers.MaxPooling1D(pool_size=1))
+
+# Output layers and flatten operation.
+model.add(keras.layers.Flatten())
+model.add(keras.layers.Dense(num_classes, activation="softmax"))
 
 model.compile(loss="categorical_crossentropy",
               optimizer="adam",
