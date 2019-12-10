@@ -13,16 +13,16 @@ from matplotlib import pyplot as plt
 
 register_matplotlib_converters()
 
-BATCH_SIZE = 64
-EPOCHS = 75
-DATA_IN_PERIOD = 14
+BATCH_SIZE = 128
+EPOCHS = 150
+DATA_IN_PERIOD = 50
 # X, Y and Z acceleration are our features
 FEATURES = 3
 
 ACTIVITY_LABELS = ["walking", "stationary", "accel", "decel"]
 
 # Read in our data
-training_data = pd.read_csv("data/complex_labels/Combined.csv")
+training_data = pd.read_csv("data/complex_labels/Accel_Night_Lab_One.csv")
 test_data = pd.read_csv("data/complex_labels/Accel_PSU_Short_Pauses.csv")
 
 training_data["TIMESTAMP"] = pd.to_datetime(training_data["TIMESTAMP"])
@@ -116,6 +116,7 @@ keras.models.save_model(model, "complex_full.h5")
 history = model.fit(x_train, y_train_hot,
                       epochs=EPOCHS, 
                       batch_size=BATCH_SIZE, 
+                      validation_split=0.5,
                       validation_data=(x_test, y_test_hot),
                       verbose=1)
 
