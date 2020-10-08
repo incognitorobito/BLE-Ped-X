@@ -4,12 +4,22 @@
 
 ### Investigated
 
-Curb Stomping
-- Stepping down from (or up onto) a curb. With phone in pocket, this produces changes in Y component as expected, but you also get some acceleration in Z as you're moving forward when stepping down from/stepping up onto a curb.
+Looking Both Ways Before Crossing
+As a kid you were likely taught (or quickly learned) this basic behavior. Everyone should slow down and look both ways before crossing the street. We can visualize this by plotting the accelerometer readings for a short walk.
 
-Stationary vs. Non-Stationary
+Figure 2: Looking Both Ways Before Crossing Visualization
 
-* There is an expected pattern for normal walking. When you stop walking, acceleration goes to zero.
+As we begin walking there is an initial acceleration from a stationary position. Then we get into our normal stride, but as we get close to the intersection (roughly the center of the image above), we slow down to look (and in some cases may even be stationary for a few seconds) then speed back up to get across the street safely. This pattern diverges slightly from your normal walking pattern and therefore combined with GPS data to confirm proximity to an intersection, and/or another of the behaviors below, could be a key indicator of crossing.
+
+Curb Your Enthusiasm
+axis_device
+
+Figure 3: Android Device Axis (Source)
+
+Jaywalking pedestrians are by definition not crossing at the crosswalk. They are therefore crossing at another point in the road, and likely stepping off the curb to do so. The quick bits of acceleration from this movement are detectable via an accelerometer. Stepping down from the curb produces a change in the Y-component, while you get a slight acceleration in the Z-component as one moves forward.
+
+About Face
+As a pedestrian approaches a crosswalk, they may need to turn to face the street/crosswalk. This feature would require data from the gyroscopic along with GPS and compass data to confirm a pedestrian’s heading.
 
 ### Unknown
 
